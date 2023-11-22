@@ -1,4 +1,4 @@
-use crate::components::{run_command::run_command, cpu::cpu_perc, ram::ram_perc, disk::disk_perc};
+use crate::components::{run_command::run_command, cpu::cpu_perc, ram::ram_perc, disk::disk_perc, uptime::uptime, datetime::datetime};
 
 
 macro_rules! push_arg {
@@ -29,5 +29,9 @@ pub fn get_components() -> Vec<Component<'static>> {
     push_arg!(vec, cpu_perc, "^b#f38ba8^[CPU: %s%%]", "");
     push_arg!(vec, ram_perc, "^b#eba0ac^[RAM: %s%%]", "");
     push_arg!(vec, disk_perc, "^b#eba0ac^[DISK: %s%%]", "/");
+    push_arg!(vec, run_command, "^b#74c7ec^[PKG: %s]" , "pacman -Q | wc -l");
+    push_arg!(vec, run_command, "^b#fab387^[TEMP: %s]", "sensors | awk '/^Tctl/ {print $2}'");
+    push_arg!(vec, uptime, "^b#94e2d5^[UP: %s]", "");
+    push_arg!(vec, datetime, "^b#f5c2e7^[%s]", "%a %b %d %r");
     return vec;
 }
