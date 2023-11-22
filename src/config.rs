@@ -1,4 +1,4 @@
-use crate::components::{run_command::run_command, cpu::cpu_perc};
+use crate::components::{run_command::run_command, cpu::cpu_perc, ram::ram_perc, disk::disk_perc};
 
 
 macro_rules! push_arg {
@@ -26,6 +26,8 @@ pub fn get_components() -> Vec<Component<'static>> {
 
     push_arg!(vec, run_command, "^c#11111b^^b#a6e3a1^[%s]", "npspotify");
     push_arg!(vec, run_command, "^b#89b4fa^[VOL: %s%%]", "pamixer --get-volume");
-    push_arg!(vec, cpu_perc, "^b#f38ba8^[CPU: %s%%]", ""); // Is none.unwrap even valid
+    push_arg!(vec, cpu_perc, "^b#f38ba8^[CPU: %s%%]", "");
+    push_arg!(vec, ram_perc, "^b#eba0ac^[RAM: %s%%]", "");
+    push_arg!(vec, disk_perc, "^b#eba0ac^[DISK: %s%%]", "/");
     return vec;
 }

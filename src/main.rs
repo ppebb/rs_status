@@ -4,6 +4,7 @@ use x11rb::{connection::Connection, wrapper::ConnectionExt, protocol::xproto::{P
 
 mod config;
 mod components;
+mod util;
 
 fn snprintf_wrapper(format: &str, arg: String) -> String {
     let mut buf = vec![0u8; 0];
