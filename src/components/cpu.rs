@@ -1,6 +1,18 @@
 use scan_fmt::scan_fmt;
 
-use crate::{config, util::first_line};
+use crate::{config, util::{first_line, format_human}};
+
+pub fn cpu_freq(_: &str) -> String {
+    return format_human(
+    scan_fmt!(
+            &first_line("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"),
+            "{d}",
+            u64
+        )
+        .unwrap() * 1000,
+        1000
+    )
+}
 
 static mut O: [i64; 7] = [0; 7];
 pub fn cpu_perc(_: &str) -> String {

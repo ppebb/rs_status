@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use libc::snprintf;
 use std::{convert::TryInto, env, ffi::CString, os::raw::c_char};
 use x11rb::{connection::Connection, wrapper::ConnectionExt, protocol::xproto::{PropMode, AtomEnum}};
