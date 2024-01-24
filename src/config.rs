@@ -1,9 +1,20 @@
 #[allow(unused_imports)]
-use crate::components::{run_command::run_command, cpu::{cpu_perc, cpu_freq}, ram::{ram_free, ram_perc}, disk::disk_perc, uptime::uptime, datetime::datetime};
+use crate::components::{
+    cpu::{cpu_freq, cpu_perc},
+    datetime::datetime,
+    disk::disk_perc,
+    ram::{ram_free, ram_perc},
+    run_command::run_command,
+    uptime::uptime,
+};
 
 macro_rules! push_arg {
     ( $vec:expr, $func:expr, $format:expr, $args:expr) => {
-        $vec.push(Component { func: $func, format: $format, args: $args })
+        $vec.push(Component {
+            func: $func,
+            format: $format,
+            args: $args,
+        })
     };
 }
 
@@ -13,12 +24,10 @@ pub const UNKNOWNSTR: &str = "n/a";
 // Update interval in ms
 pub const INTERVAL: u64 = 500;
 
-type Cmd = fn(&str) -> String;
-
 pub struct Component<'a> {
-    pub func: Cmd,
+    pub func: fn(&'a str) -> String,
     pub format: &'a str,
-    pub args: &'a str
+    pub args: &'a str,
 }
 
 pub fn get_components() -> Vec<Component<'static>> {

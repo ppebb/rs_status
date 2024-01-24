@@ -1,4 +1,5 @@
-use std::{io::{BufReader, Read}, fs};
+use std::{io::{BufReader, Read}, fs, ffi::CString, os::raw::c_char};
+use libc::{snprintf, access};
 
 pub fn format_human(num: u64, base: u64) -> String {
     let prefix;
@@ -44,4 +45,43 @@ pub fn first_line(path: &str) -> String {
     let lines = lines(path);
 
     return lines.lines().nth(0).unwrap().to_owned();
+}
+
+pub fn snprintf_wrapper(format: &str, args: &[String]) -> String {
+    let mut buf = vec![0u8; 0];
+    let cformat = CString::new(format).unwrap();
+    let clen: usize = unsafe { // This will spit out the correct size of the buffer so we don't
+        // need to just pray the resulting string was under some fixed value
+        snprintf(
+            buf.as_mut_ptr() as *mut c_char,
+            buf.len(),
+            cformat.as_ptr(),
+            args.len(),
+            args.as_ptr()
+        )
+    }
+    .try_into()
+    .unwrap();
+
+    buf = vec![0u8; clen + 1];
+    let clen: usize = unsafe { // The actual string!!
+        snprintf(
+            buf.as_mut_ptr() as *mut c_char,
+            buf.len(),
+            cformat.as_ptr(),
+            args.len(),
+            args.as_ptr()
+        )
+    }
+    .try_into()
+    .unwrap();
+
+    buf.truncate(clen);
+    return String::from_utf8(buf).unwrap();
+}
+
+pub fn access_wrapper(name: &str, amode: i32) -> bool {
+    return unsafe {
+        access(CString::new(name).unwrap().as_bytes_with_nul().as_ptr() as *const i8, amode) != 0
+    }
 }

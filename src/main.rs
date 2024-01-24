@@ -1,44 +1,12 @@
 #![allow(dead_code)]
 
-use libc::snprintf;
-use std::{convert::TryInto, env, ffi::CString, os::raw::c_char};
+use std::env;
+use util::snprintf_wrapper;
 use x11rb::{connection::Connection, wrapper::ConnectionExt, protocol::xproto::{PropMode, AtomEnum}};
 
 mod config;
 mod components;
 mod util;
-
-fn snprintf_wrapper(format: &str, arg: String) -> String {
-    let mut buf = vec![0u8; 0];
-    let cformat = CString::new(format).unwrap();
-    let carg = CString::new(arg).unwrap();
-    let clen: usize = unsafe { // This will spit out the correct size of the buffer so we don't
-        // need to just pray the resulting string was under some fixed value
-        snprintf(
-            buf.as_mut_ptr() as *mut c_char,
-            buf.len(),
-            cformat.as_ptr(),
-            carg.as_ptr()
-        )
-    }
-    .try_into()
-    .unwrap();
-
-    buf = vec![0u8; clen + 1];
-    let clen: usize = unsafe { // The actual string!!
-        snprintf(
-            buf.as_mut_ptr() as *mut c_char,
-            buf.len(),
-            cformat.as_ptr(),
-            carg.as_ptr()
-        )
-    }
-    .try_into()
-    .unwrap();
-
-    buf.truncate(clen);
-    return String::from_utf8(buf).unwrap();
-}
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -66,7 +34,7 @@ fn main() {
 
         for i in 0..components.len() {
             let component = &components[i];
-            status[i] = snprintf_wrapper(component.format, (component.func)(component.args));
+            status[i] = snprintf_wrapper(component.format, &[ (component.func)(component.args) ]);
         }
 
         let status_str: String = status.join("");
