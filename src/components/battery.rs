@@ -49,7 +49,7 @@ pub fn battery_remaining(bat: &str) -> String {
         "/sys/class/power_supply/%s/energy_now",
     ) {
         Ok(path) => scan_fmt!(&lines(&path), "{d}", u64).unwrap(),
-        Err(e_string) => return e_string,
+        Err(e) => return e,
     };
 
     let state = &lines(&path)[..12];
@@ -73,7 +73,7 @@ pub fn battery_remaining(bat: &str) -> String {
 
                 return format!("{}h {}m", h, m);
             }
-            Err(e_string) => e_string,
+            Err(e) => e,
         };
     }
 
