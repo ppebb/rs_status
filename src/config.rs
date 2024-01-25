@@ -3,6 +3,7 @@ use crate::components::{
     cpu::{cpu_freq, cpu_perc},
     datetime::datetime,
     disk::disk_perc,
+    hostname::hostname,
     ram::{ram_free, ram_perc},
     run_command::run_command,
     uptime::uptime,
@@ -44,5 +45,6 @@ pub fn get_components() -> Vec<Component<'static>> {
     // push_arg!(vec, datetime, "^b#f5c2e7^[%s]", "%a %b %d %r");
     push_arg!(vec, cpu_freq, "%s", "");
     push_arg!(vec, ram_free, "%s", "");
+    push_arg!(vec, hostname, "%s", "");
     return vec;
 }

@@ -3,6 +3,7 @@ pub mod cpu;
 pub mod datetime;
 pub mod disk;
 pub mod entropy;
+pub mod hostname;
 pub mod ram;
 pub mod run_command;
 pub mod uptime;

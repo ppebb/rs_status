@@ -3,12 +3,12 @@ use scan_fmt::scan_fmt;
 use crate::util::{access_wrapper, lines, snprintf_wrapper};
 
 fn pick(bat: &str, f1: &str, f2: &str) -> Result<String, String> {
-    let path = snprintf_wrapper(f1, &[bat.to_owned()]);
+    let path = snprintf_wrapper(f1, bat.to_owned());
 
     match access_wrapper(&path, 4) {
         true => return Ok(path.clone()),
         false => {
-            let path2 = snprintf_wrapper(f2, &[bat.to_owned()]);
+            let path2 = snprintf_wrapper(f2, bat.to_owned());
 
             match access_wrapper(&path, 4) {
                 true => return Ok(path.clone()),

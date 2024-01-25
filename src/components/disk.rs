@@ -4,16 +4,16 @@ use std::{ffi::CString, mem::MaybeUninit};
 use crate::util::format_human;
 
 pub fn statvfs_wrapper(path: &str) -> Result<statvfs, String> {
-    let mut buffer = MaybeUninit::<statvfs>::uninit();
+    let mut buf = MaybeUninit::<statvfs>::uninit();
     let cpath = CString::new(path).unwrap();
 
     unsafe {
-        let ret = statvfs(cpath.as_ptr(), buffer.as_mut_ptr());
+        let ret = statvfs(cpath.as_ptr(), buf.as_mut_ptr());
 
         if ret < 0 {
             return Err(format!("unable to statvfs {}", path));
         }
-        return Ok(buffer.assume_init());
+        return Ok(buf.assume_init());
     }
 }
 
