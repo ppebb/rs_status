@@ -1,8 +1,9 @@
 use scan_fmt::scan_fmt;
 
-use crate::{util::{lines, format_human, first_line}, config::UNKNOWNSTR};
-
-
+use crate::{
+    config::UNKNOWNSTR,
+    util::{first_line, format_human, lines},
+};
 
 pub fn ram_free(_: &str) -> String {
     const PATTERN: &str = "MemTotal:{/[\\s]*(\\d)+/} kB
@@ -23,7 +24,8 @@ Buffers:{/[\\s]*(\\d)+/} kB
 Cached:{/[\\s]*(\\d)+/} kB
     ";
 
-    let (total, free, _, buffers, cached) = scan_fmt!(&lines("/proc/meminfo"), PATTERN, u64, u64, u64, u64, u64).unwrap();
+    let (total, free, _, buffers, cached) =
+        scan_fmt!(&lines("/proc/meminfo"), PATTERN, u64, u64, u64, u64, u64).unwrap();
 
     if total == 0 {
         return UNKNOWNSTR.to_owned();
@@ -46,7 +48,8 @@ Buffers:{/[\\s]*(\\d)+/} kB
 Cached:{/[\\s]*(\\d)+/} kB
     ";
 
-    let (total, free, _, buffers, cached) = scan_fmt!(&lines("/proc/meminfo"), PATTERN, u64, u64, u64, u64, u64).unwrap();
+    let (total, free, _, buffers, cached) =
+        scan_fmt!(&lines("/proc/meminfo"), PATTERN, u64, u64, u64, u64, u64).unwrap();
 
-    return format_human((total - free - buffers - cached) * 1024, 1024)
+    return format_human((total - free - buffers - cached) * 1024, 1024);
 }

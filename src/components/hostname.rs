@@ -4,7 +4,7 @@ use libc::gethostname;
 
 use crate::util::string_from_u8_nul_utf8;
 
-pub fn gethostname_wrapper() -> Result<String, String> {
+fn gethostname_wrapper() -> Result<String, String> {
     let mut buf = vec![0u8; 1024];
 
     unsafe {

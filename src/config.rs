@@ -4,6 +4,8 @@ use crate::components::{
     datetime::datetime,
     disk::disk_perc,
     hostname::hostname,
+    ip::{ipv4, ipv6},
+    load_avg::load_avg,
     ram::{ram_free, ram_perc},
     run_command::run_command,
     uptime::uptime,
@@ -46,5 +48,8 @@ pub fn get_components() -> Vec<Component<'static>> {
     push_arg!(vec, cpu_freq, "%s", "");
     push_arg!(vec, ram_free, "%s", "");
     push_arg!(vec, hostname, "%s", "");
+    push_arg!(vec, ipv6, "%s", "enp34s0");
+    push_arg!(vec, load_avg, "%s", "");
+
     return vec;
 }

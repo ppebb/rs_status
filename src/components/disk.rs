@@ -3,7 +3,7 @@ use std::{ffi::CString, mem::MaybeUninit};
 
 use crate::util::format_human;
 
-pub fn statvfs_wrapper(path: &str) -> Result<statvfs, String> {
+fn statvfs_wrapper(path: &str) -> Result<statvfs, String> {
     let mut buf = MaybeUninit::<statvfs>::uninit();
     let cpath = CString::new(path).unwrap();
 
@@ -13,6 +13,7 @@ pub fn statvfs_wrapper(path: &str) -> Result<statvfs, String> {
         if ret < 0 {
             return Err(format!("unable to statvfs {}", path));
         }
+
         return Ok(buf.assume_init());
     }
 }
